@@ -8,7 +8,8 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categorias: []
+      categorias: [],
+      productos: []
   }
 }
 
@@ -21,18 +22,40 @@ export default class App extends Component {
     }
   )
 }
+
+  buscarProductos(){
+    const url = "https://productos.ctpoba.edu.ar/api/productos"
+    axios.get(url)
+    .then((resp) =>{
+      this.setState({productos: resp.data.productos})
+    })
+  }
   render() {
     return (
-    <div>
-      <span> 
-      APP
-      </span>
-      <input
-      type="text"
-      value="Buscar"
-      onClick={() => this.buscarCategorias}
-      />
-    </div>
+    <div className="App">
+        <span>
+          APP
+        </span>
+        <input
+          type="text"
+          value="Buscar"
+          onClick={() => this.buscarCategorias()} />
+
+          <select
+          value={this.state.categoria_id}
+          onChange={() => this.setState({categoria_id: e.target.value})}
+          >
+            {this.state.categorias.map((categoria, i) => 
+              <option key={categoria.id} value={categoria.id}>
+                {categoria.nombre}
+              </option>
+            )}
+          </select>
+          <button 
+          className='Buscar' 
+          onClick={() => this.buscarProductos()}
+          >Buscar</button>
+      </div>
     )
   }
 }
